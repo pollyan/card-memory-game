@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>卡牌消消乐游戏 - 8位游戏音乐</title>
     <style>
         * {
@@ -229,6 +229,190 @@
         .card-symbol-rainbow { color: #e67e22; }
         .card-symbol-fire { color: #e74c3c; }
         .card-symbol-gem { color: #3498db; }
+
+        /* 移动端响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .game-container {
+                padding: 20px;
+                border-radius: 15px;
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+
+            .game-info {
+                font-size: 0.9em;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+
+            .game-board {
+                width: 100%;
+                max-width: 350px;
+                height: auto;
+                aspect-ratio: 6/4;
+                gap: 8px;
+            }
+
+            .card-face {
+                font-size: 1.8em;
+                border-radius: 10px;
+            }
+
+            .card {
+                border-radius: 10px;
+            }
+
+            .controls {
+                margin-top: 20px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+                margin: 5px;
+                display: inline-block;
+                min-width: 120px;
+            }
+
+            .controls > div {
+                margin-top: 10px !important;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .controls > div > label {
+                font-size: 0.9em;
+            }
+
+            #volumeSlider {
+                width: 150px !important;
+                margin: 5px 0 !important;
+            }
+
+            .message {
+                font-size: 1.1em;
+                margin-top: 15px;
+                padding: 0 10px;
+            }
+        }
+
+        /* 小屏幕手机 */
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .game-info {
+                font-size: 0.8em;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .game-board {
+                max-width: 300px;
+                gap: 6px;
+            }
+
+            .card-face {
+                font-size: 1.5em;
+                border-radius: 8px;
+            }
+
+            .card {
+                border-radius: 8px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.8em;
+                min-width: 100px;
+                margin: 3px;
+            }
+
+            .controls {
+                margin-top: 15px;
+            }
+
+            #volumeSlider {
+                width: 120px !important;
+            }
+
+            .message {
+                font-size: 1em;
+            }
+        }
+
+        /* 横屏模式优化 */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .game-container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+                margin-bottom: 10px;
+            }
+
+            .game-info {
+                margin-bottom: 10px;
+                font-size: 0.8em;
+            }
+
+            .game-board {
+                max-width: 400px;
+                height: auto;
+            }
+
+            .controls {
+                margin-top: 10px;
+            }
+
+            .controls > div {
+                margin-top: 5px !important;
+            }
+
+            .message {
+                margin-top: 10px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* 触摸设备优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .card {
+                cursor: default;
+            }
+
+            .btn {
+                cursor: default;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .btn:active {
+                transform: scale(0.95);
+            }
+
+            .card:active {
+                transform: scale(0.95);
+            }
+        }
     </style>
 </head>
 <body>
