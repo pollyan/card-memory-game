@@ -46,21 +46,44 @@
 
         .game-info {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
             margin-bottom: 20px;
             color: white;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        
+        .score-display {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ffb700;
+            text-shadow: 0 0 15px rgba(255, 183, 0, 0.6);
+            background: linear-gradient(45deg, rgba(255, 183, 0, 0.2), rgba(255, 215, 0, 0.1));
+            border: 2px solid rgba(255, 183, 0, 0.3);
+            border-radius: 10px;
+            padding: 8px 16px;
+            margin-bottom: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .score-display #score {
+            color: #ffd700;
             font-size: 1.2em;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+        
+        .game-info-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
 
         .game-board {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            gap: 12px;
-            width: 480px;
-            height: 320px;
+            gap: 10px;
             margin: 0 auto;
+            /* 具体尺寸由关卡特定样式定义 */
         }
 
         .card {
@@ -208,6 +231,13 @@
             z-index: 1002;
             animation: scoreFloat 1.5s ease-out forwards;
         }
+        
+        .match-score.first-flip {
+            color: #ffb700;
+            font-size: 1.8em;
+            text-shadow: 0 0 15px rgba(255, 183, 0, 0.8);
+            animation: scoreFloatBig 1.5s ease-out forwards;
+        }
 
         @keyframes scoreFloat {
             0% {
@@ -220,6 +250,25 @@
             }
             100% {
                 transform: translate(-50%, -200%) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes scoreFloatBig {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 1;
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -200%) scale(1);
                 opacity: 0;
             }
         }
@@ -373,33 +422,38 @@
             margin: 0;
         }
 
-        /* 动态游戏板样式 */
+        /* 固定卡片尺寸的游戏板样式 */
+        .card {
+            width: 75px !important;
+            height: 75px !important;
+        }
+        
         .game-board.level-1 {
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            max-width: 200px;
-            aspect-ratio: 1/1;
+            grid-template-columns: repeat(2, 75px);
+            grid-template-rows: repeat(2, 75px);
+            width: 160px; /* 2*75 + 1*10 gap */
+            height: 160px; /* 2*75 + 1*10 gap */
         }
 
         .game-board.level-2 {
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
-            max-width: 350px;
-            aspect-ratio: 1/1;
+            grid-template-columns: repeat(4, 75px);
+            grid-template-rows: repeat(4, 75px);
+            width: 330px; /* 4*75 + 3*10 gap */
+            height: 330px; /* 4*75 + 3*10 gap */
         }
 
         .game-board.level-3 {
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(6, 1fr);
-            max-width: 350px;
-            aspect-ratio: 4/6;
+            grid-template-columns: repeat(4, 75px);
+            grid-template-rows: repeat(5, 75px);
+            width: 330px; /* 4*75 + 3*10 gap */
+            height: 415px; /* 5*75 + 4*10 gap */
         }
 
         .game-board.level-4 {
-            grid-template-columns: repeat(6, 1fr);
-            grid-template-rows: repeat(6, 1fr);
-            max-width: 480px;
-            aspect-ratio: 1/1;
+            grid-template-columns: repeat(5, 75px);
+            grid-template-rows: repeat(6, 75px);
+            width: 415px; /* 5*75 + 4*10 gap */
+            height: 500px; /* 6*75 + 5*10 gap */
         }
 
         /* 下一关按钮特殊样式 */
@@ -436,7 +490,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5em;
+            font-size: 2.2em; /* 适应75px卡片 */
             font-weight: bold;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
@@ -483,18 +537,19 @@
 
         .message {
             text-align: center;
-            margin-top: 20px;
-            font-size: 1.3em;
+            margin-top: 15px;
+            font-size: 1.1em;
             color: white;
             font-weight: bold;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transition: opacity 0.5s;
-            min-height: 120px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
             white-space: pre-line;
+            line-height: 1.3;
         }
 
         .message.show {
@@ -592,6 +647,22 @@
         .card-symbol-fire { color: #e74c3c; }
         .card-symbol-gem { color: #3498db; }
 
+        /* 移动端分数显示优化 */
+        @media (max-width: 768px) {
+            .score-display {
+                font-size: 1.2em;
+                padding: 6px 12px;
+            }
+            
+            .score-display #score {
+                font-size: 1.1em;
+            }
+            
+            .game-info-row {
+                font-size: 0.95em;
+            }
+        }
+        
         /* 移动端响应式设计 */
         @media (max-width: 768px) {
             body {
@@ -671,21 +742,46 @@
                 margin-bottom: 12px;
             }
 
-            .game-board {
-                width: 100%;
-                max-width: 100%;
-                height: auto;
-                aspect-ratio: 4/6;
-                gap: 6px;
-                grid-template-columns: repeat(4, 1fr);
-                grid-template-rows: repeat(6, 1fr);
-                margin: 0 auto;
-                flex: 1;
-                max-height: 60vh;
+            /* 移动端固定卡片尺寸 */
+            .card {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            
+            .game-board.level-1 {
+                grid-template-columns: repeat(2, 60px);
+                grid-template-rows: repeat(2, 60px);
+                width: 130px; /* 2*60 + 1*10 gap */
+                height: 130px; /* 2*60 + 1*10 gap */
+                gap: 10px;
+            }
+
+            .game-board.level-2 {
+                grid-template-columns: repeat(4, 60px);
+                grid-template-rows: repeat(4, 60px);
+                width: 270px; /* 4*60 + 3*10 gap */
+                height: 270px; /* 4*60 + 3*10 gap */
+                gap: 10px;
+            }
+
+            .game-board.level-3 {
+                grid-template-columns: repeat(4, 60px);
+                grid-template-rows: repeat(5, 60px);
+                width: 270px; /* 4*60 + 3*10 gap */
+                height: 340px; /* 5*60 + 4*10 gap */
+                gap: 10px;
+            }
+
+            .game-board.level-4 {
+                grid-template-columns: repeat(5, 60px);
+                grid-template-rows: repeat(6, 60px);
+                width: 340px; /* 5*60 + 4*10 gap */
+                height: 410px; /* 6*60 + 5*10 gap */
+                gap: 10px;
             }
 
             .card-face {
-                font-size: 2.2em;
+                font-size: 1.8em; /* 适应60px卡片 */
                 border-radius: 8px;
             }
 
@@ -725,10 +821,11 @@
             }
 
             .message {
-                font-size: 1em;
-                margin-top: 10px;
+                font-size: 0.95em;
+                margin-top: 8px;
                 padding: 0 10px;
-                min-height: 80px;
+                min-height: 50px;
+                line-height: 1.2;
             }
         }
 
@@ -756,17 +853,46 @@
                 margin-bottom: 8px;
             }
 
-            .game-board {
-                max-width: 100%;
-                gap: 4px;
-                grid-template-columns: repeat(4, 1fr);
-                grid-template-rows: repeat(6, 1fr);
-                aspect-ratio: 4/6;
-                max-height: 65vh;
+            /* 小屏幕手机固定卡片尺寸 */
+            .card {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            
+            .game-board.level-1 {
+                grid-template-columns: repeat(2, 50px);
+                grid-template-rows: repeat(2, 50px);
+                width: 108px; /* 2*50 + 1*8 gap */
+                height: 108px; /* 2*50 + 1*8 gap */
+                gap: 8px;
+            }
+
+            .game-board.level-2 {
+                grid-template-columns: repeat(4, 50px);
+                grid-template-rows: repeat(4, 50px);
+                width: 224px; /* 4*50 + 3*8 gap */
+                height: 224px; /* 4*50 + 3*8 gap */
+                gap: 8px;
+            }
+
+            .game-board.level-3 {
+                grid-template-columns: repeat(4, 50px);
+                grid-template-rows: repeat(5, 50px);
+                width: 224px; /* 4*50 + 3*8 gap */
+                height: 282px; /* 5*50 + 4*8 gap */
+                gap: 8px;
+            }
+
+            .game-board.level-4 {
+                grid-template-columns: repeat(5, 50px);
+                grid-template-rows: repeat(6, 50px);
+                width: 282px; /* 5*50 + 4*8 gap */
+                height: 340px; /* 6*50 + 5*8 gap */
+                gap: 8px;
             }
 
             .card-face {
-                font-size: 1.8em;
+                font-size: 1.4em; /* 适应50px卡片 */
                 border-radius: 6px;
             }
 
@@ -800,8 +926,10 @@
             }
 
             .message {
-                font-size: 0.9em;
-                margin-top: 8px;
+                font-size: 0.85em;
+                margin-top: 6px;
+                min-height: 40px;
+                line-height: 1.2;
             }
         }
 
@@ -912,7 +1040,7 @@
         <!-- 关卡选择界面 -->
         <div class="level-select" id="levelSelect">
             <div class="level-select-content">
-                <h1>🎴 卡牌消消乐</h1>
+        <h1>🎴 卡牌消消乐</h1>
                 <h2>选择关卡</h2>
                 <div class="level-grid">
                     <div class="level-card" data-level="1">
@@ -930,13 +1058,13 @@
                     <div class="level-card locked" data-level="3">
                         <div class="level-number">3</div>
                         <div class="level-name">挑战关卡</div>
-                        <div class="level-desc">4×6 网格</div>
+                        <div class="level-desc">4×5 网格</div>
                         <div class="level-status">🔒</div>
                     </div>
                     <div class="level-card locked" data-level="4">
                         <div class="level-number">4</div>
                         <div class="level-name">专家关卡</div>
-                        <div class="level-desc">6×6 网格</div>
+                        <div class="level-desc">5×6 网格</div>
                         <div class="level-status">🔒</div>
                     </div>
                 </div>
@@ -960,23 +1088,26 @@
             </div>
             
             <div class="game-content">
-                <div class="game-info">
-                    <div>翻牌次数: <span id="moves">0</span></div>
-                    <div>时间: <span id="time">00:00</span></div>
-                    <div>匹配: <span id="matches">0</span>/<span id="totalPairs">2</span></div>
+                        <div class="game-info">
+                    <div class="score-display">总分数: <span id="score">0</span></div>
+                    <div class="game-info-row">
+                        <div>翻牌: <span id="moves">0</span></div>
+                        <div>时间: <span id="time">00:00</span></div>
+                        <div>匹配: <span id="matches">0</span>/<span id="totalPairs">2</span></div>
+                    </div>
                 </div>
-                
-                <div class="game-board" id="gameBoard">
-                    <!-- 卡牌将通过JavaScript动态生成 -->
+        
+        <div class="game-board" id="gameBoard">
+            <!-- 卡牌将通过JavaScript动态生成 -->
                 </div>
-            </div>
-            
+        </div>
+        
             <div class="game-bottom">
-                <div class="controls">
+        <div class="controls">
                     <button class="btn" onclick="restartLevel()">🔄 重新开始</button>
-                </div>
-                
-                <div class="message" id="message"></div>
+        </div>
+        
+        <div class="message" id="message"></div>
             </div>
         </div>
     </div>
@@ -997,19 +1128,29 @@
             flippedCards: [],
             matchedPairs: 0,
             moves: 0,
+            score: 0,
+            cardFlipCount: [], // 记录每张卡片被翻开的次数
             startTime: null,
             gameTimer: null,
             isProcessing: false,
             currentLevel: 1,
             unlockedLevels: 1
         };
+        
+        // 页面加载时清空所有进度
+        function resetGameProgress() {
+            localStorage.removeItem('cardGameProgress');
+            gameState.score = 0;
+            gameState.unlockedLevels = 1;
+            gameState.currentLevel = 1;
+        }
 
         // 关卡配置
         const levelConfigs = {
             1: { name: '新手关卡', cols: 2, rows: 2, pairs: 2, maxWidth: '200px', aspectRatio: '1/1' },
             2: { name: '进阶关卡', cols: 4, rows: 4, pairs: 8, maxWidth: '350px', aspectRatio: '1/1' },
-            3: { name: '挑战关卡', cols: 4, rows: 6, pairs: 12, maxWidth: '350px', aspectRatio: '4/6' },
-            4: { name: '专家关卡', cols: 6, rows: 6, pairs: 18, maxWidth: '480px', aspectRatio: '1/1' }
+            3: { name: '挑战关卡', cols: 4, rows: 5, pairs: 10, maxWidth: '350px', aspectRatio: '4/5' },
+            4: { name: '专家关卡', cols: 5, rows: 6, pairs: 15, maxWidth: '480px', aspectRatio: '5/6' }
         };
 
         // 卡牌符号
@@ -1254,7 +1395,10 @@
                 initAudio();
             }
             
-            // 加载游戏进度
+            // 重置游戏进度（清空所有数据）
+            resetGameProgress();
+            
+            // 加载游戏进度（现在只是设置初始状态）
             loadGameProgress();
             
             // 显示关卡选择界面
@@ -1266,19 +1410,18 @@
         
         // 加载游戏进度
         function loadGameProgress() {
-            const savedProgress = localStorage.getItem('cardGameProgress');
-            if (savedProgress) {
-                const progress = JSON.parse(savedProgress);
-                gameState.unlockedLevels = progress.unlockedLevels || 1;
-            }
+            // 每次页面加载时清空所有进度
+            localStorage.removeItem('cardGameProgress');
+            
+            // 重置为初始状态
+            gameState.unlockedLevels = 1;
+            gameState.score = 0;
         }
         
-        // 保存游戏进度
+        // 保存游戏进度（已禁用 - 每次刷新重置）
         function saveGameProgress() {
-            const progress = {
-                unlockedLevels: gameState.unlockedLevels
-            };
-            localStorage.setItem('cardGameProgress', JSON.stringify(progress));
+            // 不再保存进度，每次页面加载都重置
+            // 保持函数以避免其他地方的调用出错
         }
         
         // 显示关卡选择界面
@@ -1347,10 +1490,12 @@
             // 洗牌
             shuffleArray(gameState.cards);
             
-            // 重置游戏状态
+            // 重置游戏状态（分数保持累积）
             gameState.flippedCards = [];
             gameState.matchedPairs = 0;
             gameState.moves = 0;
+            // gameState.score = 0; // 注释掉，保持分数累积
+            gameState.cardFlipCount = new Array(gameState.cards.length).fill(0);
             gameState.startTime = Date.now();
             gameState.isProcessing = false;
             
@@ -1425,6 +1570,9 @@
             gameState.flippedCards.push(index);
             gameState.moves++;
             
+            // 增加该卡牌的翻开次数
+            gameState.cardFlipCount[index]++;
+            
             // 检查匹配
             if (gameState.flippedCards.length === 2) {
                 gameState.isProcessing = true;
@@ -1444,10 +1592,19 @@
         }
 
         // 播放匹配动画
-        function playMatchAnimation(card1, card2) {
+        function playMatchAnimation(card1, card2, card1Index, card2Index) {
             // 添加成功匹配的动画类
             card1.classList.add('match-success');
             card2.classList.add('match-success');
+            
+            // 计算分数
+            const card1FirstFlip = isFirstFlip(card1Index);
+            const card2FirstFlip = isFirstFlip(card2Index);
+            const card1Score = card1FirstFlip ? 200 : 100;
+            const card2Score = card2FirstFlip ? 200 : 100;
+            
+            // 添加分数到总分
+            gameState.score += card1Score + card2Score;
             
             // 创建发光效果
             createGlowEffect(card1);
@@ -1467,8 +1624,8 @@
             
             // 显示分数提示
             setTimeout(() => {
-                createScoreEffect(card1, '+100');
-                createScoreEffect(card2, '+100');
+                createScoreEffect(card1, `+${card1Score}`, card1FirstFlip);
+                createScoreEffect(card2, `+${card2Score}`, card2FirstFlip);
             }, 300);
             
             // 1.2秒后添加matched类并清理动画
@@ -1478,6 +1635,12 @@
                 card1.classList.remove('match-success');
                 card2.classList.remove('match-success');
             }, 1200);
+        }
+        
+        // 检查是否是首次翻开
+        function isFirstFlip(cardIndex) {
+            // 如果该卡片只被翻开过1次（当前这次），那就是首次翻开
+            return gameState.cardFlipCount[cardIndex] === 1;
         }
         
         // 创建发光波纹效果
@@ -1559,13 +1722,13 @@
         }
         
         // 创建分数飞出效果
-        function createScoreEffect(card, scoreText) {
+        function createScoreEffect(card, scoreText, isFirstFlip = false) {
             const cardRect = card.getBoundingClientRect();
             const cardCenterX = cardRect.left + cardRect.width / 2;
             const cardCenterY = cardRect.top + cardRect.height / 2;
             
             const score = document.createElement('div');
-            score.className = 'match-score';
+            score.className = isFirstFlip ? 'match-score first-flip' : 'match-score';
             score.textContent = scoreText;
             
             score.style.left = cardCenterX + 'px';
@@ -1592,7 +1755,7 @@
                 const cardElement2 = document.querySelector(`[data-index="${index2}"]`);
                 
                 // 播放炫酷消除动画
-                playMatchAnimation(cardElement1, cardElement2);
+                playMatchAnimation(cardElement1, cardElement2, index1, index2);
                 
                 gameState.matchedPairs++;
                 
@@ -1630,6 +1793,7 @@
         function updateDisplay() {
             document.getElementById('moves').textContent = gameState.moves;
             document.getElementById('matches').textContent = gameState.matchedPairs;
+            document.getElementById('score').textContent = gameState.score;
         }
 
         // 结束关卡
@@ -1642,28 +1806,34 @@
             // 播放胜利音效
             playSound('winSound');
             
-            // 解锁下一关
+            // 解锁下一关并保存进度（包括累积分数）
             if (gameState.currentLevel === gameState.unlockedLevels && gameState.currentLevel < 4) {
                 gameState.unlockedLevels++;
-                saveGameProgress();
             }
+            saveGameProgress(); // 每次通关都保存进度和分数
             
             // 开始庆祝动画
             startCelebration();
             
             setTimeout(() => {
                 const config = levelConfigs[gameState.currentLevel];
-                let message = `🎉 ${config.name}通关！\n用时: ${minutes}分${seconds}秒\n翻牌次数: ${gameState.moves}次`;
+                // 计算本关得分（当前分数减去上一次保存的分数）
+                const savedData = localStorage.getItem('cardGameProgress');
+                const previousScore = savedData ? (JSON.parse(savedData).score || 0) : 0;
+                const currentLevelScore = gameState.score - previousScore;
+                
+                // 紧凑的通关信息显示
+                let message = `🎉 ${config.name}通关！ 用时:${minutes}分${seconds}秒 翻牌:${gameState.moves}次\n本关:${currentLevelScore}分 总分:${gameState.score}分`;
                 
                 const hasNextLevel = gameState.currentLevel < 4;
                 
                 if (hasNextLevel) {
                     if (gameState.currentLevel === gameState.unlockedLevels - 1) {
-                        message += '\n\n🔓 恭喜解锁下一关！';
+                        message += ' 🔓已解锁下一关！';
                     }
-                    message += '\n\n⏱️ 3秒后自动进入下一关...';
+                    message += '\n⏱️ 3秒后自动进入下一关...';
                 } else {
-                    message += '\n\n🏆 恭喜完成所有关卡！';
+                    message += '\n🏆 恭喜完成所有关卡！';
                 }
                 
                 showMessage(message, 'win-message');
