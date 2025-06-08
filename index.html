@@ -76,6 +76,148 @@
             cursor: not-allowed;
         }
 
+        /* 炫酷消除动画 */
+        .card.match-success {
+            animation: matchSuccess 1.2s ease-out forwards;
+        }
+
+        @keyframes matchSuccess {
+            0% {
+                transform: scale(1) rotateY(180deg);
+                filter: brightness(1);
+            }
+            20% {
+                transform: scale(1.15) rotateY(180deg);
+                filter: brightness(1.5) drop-shadow(0 0 20px gold);
+            }
+            40% {
+                transform: scale(1.1) rotateY(180deg) rotateZ(5deg);
+                filter: brightness(1.3) drop-shadow(0 0 15px #4ecdc4);
+            }
+            60% {
+                transform: scale(1.05) rotateY(180deg) rotateZ(-3deg);
+                filter: brightness(1.1) drop-shadow(0 0 10px #ff6b6b);
+            }
+            80% {
+                transform: scale(0.95) rotateY(180deg) rotateZ(1deg);
+                filter: brightness(0.8);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(0.9) rotateY(180deg);
+                filter: brightness(0.6);
+                opacity: 0.3;
+            }
+        }
+
+        /* 粒子爆炸效果 */
+        .match-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+            animation: particleExplosion 0.8s ease-out forwards;
+        }
+
+        @keyframes particleExplosion {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 发光波纹效果 */
+        .match-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            animation: glowExpand 0.6s ease-out forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes glowExpand {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        /* 星星闪烁效果 */
+        .match-star {
+            position: absolute;
+            color: #ffd700;
+            font-size: 1.2em;
+            pointer-events: none;
+            z-index: 1001;
+            animation: starTwinkle 1s ease-out forwards;
+        }
+
+        @keyframes starTwinkle {
+            0% {
+                transform: translate(0, 0) scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            25% {
+                transform: translate(var(--star-dx), var(--star-dy)) scale(1.2) rotate(90deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(calc(var(--star-dx) * 1.5), calc(var(--star-dy) * 1.5)) scale(1) rotate(180deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(calc(var(--star-dx) * 2), calc(var(--star-dy) * 2)) scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 匹配数字提示动画 */
+        .match-score {
+            position: absolute;
+            color: #4ecdc4;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+            z-index: 1002;
+            animation: scoreFloat 1.5s ease-out forwards;
+        }
+
+        @keyframes scoreFloat {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            30% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -200%) scale(0.8);
+                opacity: 0;
+            }
+        }
+
         .card-face {
             position: absolute;
             width: 100%;
@@ -886,6 +1028,141 @@
             gameState.flippedCards = [];
         }
 
+        // 播放匹配动画
+        function playMatchAnimation(card1, card2) {
+            // 添加成功匹配的动画类
+            card1.classList.add('match-success');
+            card2.classList.add('match-success');
+            
+            // 创建发光效果
+            createGlowEffect(card1);
+            createGlowEffect(card2);
+            
+            // 创建粒子爆炸效果
+            setTimeout(() => {
+                createParticleExplosion(card1);
+                createParticleExplosion(card2);
+            }, 200);
+            
+            // 创建星星效果
+            setTimeout(() => {
+                createStarEffect(card1);
+                createStarEffect(card2);
+            }, 100);
+            
+            // 显示分数提示
+            setTimeout(() => {
+                createScoreEffect(card1, '+100');
+                createScoreEffect(card2, '+100');
+            }, 300);
+            
+            // 1.2秒后添加matched类并清理动画
+            setTimeout(() => {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                card1.classList.remove('match-success');
+                card2.classList.remove('match-success');
+            }, 1200);
+        }
+        
+        // 创建发光波纹效果
+        function createGlowEffect(card) {
+            const glow = document.createElement('div');
+            glow.className = 'match-glow';
+            card.appendChild(glow);
+            
+            setTimeout(() => {
+                glow.remove();
+            }, 600);
+        }
+        
+        // 创建粒子爆炸效果
+        function createParticleExplosion(card) {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            
+            const colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#eb4d4b'];
+            
+            // 创建8个粒子
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'match-particle';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // 随机方向和距离
+                const angle = (i / 8) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+                const distance = 60 + Math.random() * 40;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--dx', dx + 'px');
+                particle.style.setProperty('--dy', dy + 'px');
+                
+                particle.style.left = cardCenterX + 'px';
+                particle.style.top = cardCenterY + 'px';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 800);
+            }
+        }
+        
+        // 创建星星闪烁效果
+        function createStarEffect(card) {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            
+            // 创建4颗星星
+            for (let i = 0; i < 4; i++) {
+                const star = document.createElement('div');
+                star.className = 'match-star';
+                star.textContent = '✨';
+                
+                // 随机方向
+                const angle = (i / 4) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+                const distance = 40 + Math.random() * 20;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                
+                star.style.setProperty('--star-dx', dx + 'px');
+                star.style.setProperty('--star-dy', dy + 'px');
+                
+                star.style.left = cardCenterX + 'px';
+                star.style.top = cardCenterY + 'px';
+                star.style.transform = 'translate(-50%, -50%)';
+                
+                document.body.appendChild(star);
+                
+                setTimeout(() => {
+                    star.remove();
+                }, 1000);
+            }
+        }
+        
+        // 创建分数飞出效果
+        function createScoreEffect(card, scoreText) {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            
+            const score = document.createElement('div');
+            score.className = 'match-score';
+            score.textContent = scoreText;
+            
+            score.style.left = cardCenterX + 'px';
+            score.style.top = cardCenterY + 'px';
+            
+            document.body.appendChild(score);
+            
+            setTimeout(() => {
+                score.remove();
+            }, 1500);
+        }
+
         // 检查匹配
         function checkMatch() {
             const [index1, index2] = gameState.flippedCards;
@@ -899,8 +1176,8 @@
                 const cardElement1 = document.querySelector(`[data-index="${index1}"]`);
                 const cardElement2 = document.querySelector(`[data-index="${index2}"]`);
                 
-                cardElement1.classList.add('matched');
-                cardElement2.classList.add('matched');
+                // 播放炫酷消除动画
+                playMatchAnimation(cardElement1, cardElement2);
                 
                 gameState.matchedPairs++;
                 
