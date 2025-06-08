@@ -233,134 +233,168 @@
         /* 移动端响应式设计 */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 5px;
+                min-height: 100vh;
+                justify-content: flex-start;
             }
 
             .game-container {
-                padding: 20px;
+                padding: 15px;
                 border-radius: 15px;
                 max-width: 100%;
+                width: 100%;
+                min-height: calc(100vh - 10px);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
             }
 
             h1 {
-                font-size: 1.8em;
-                margin-bottom: 20px;
+                font-size: 1.6em;
+                margin-bottom: 15px;
             }
 
             .game-info {
-                font-size: 0.9em;
+                font-size: 0.85em;
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 8px;
                 justify-content: center;
-                margin-bottom: 15px;
+                margin-bottom: 12px;
             }
 
             .game-board {
                 width: 100%;
-                max-width: 350px;
+                max-width: 100%;
                 height: auto;
-                aspect-ratio: 6/4;
-                gap: 8px;
+                aspect-ratio: 4/6;
+                gap: 6px;
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+                margin: 0 auto;
+                flex: 1;
+                max-height: 60vh;
             }
 
             .card-face {
-                font-size: 1.8em;
-                border-radius: 10px;
+                font-size: 1.6em;
+                border-radius: 8px;
             }
 
             .card {
-                border-radius: 10px;
+                border-radius: 8px;
             }
 
             .controls {
-                margin-top: 20px;
+                margin-top: 15px;
+                flex-shrink: 0;
             }
 
             .btn {
-                padding: 10px 20px;
-                font-size: 0.9em;
-                margin: 5px;
+                padding: 8px 16px;
+                font-size: 0.8em;
+                margin: 3px;
                 display: inline-block;
-                min-width: 120px;
+                min-width: 100px;
             }
 
             .controls > div {
-                margin-top: 10px !important;
+                margin-top: 8px !important;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 8px;
+                gap: 6px;
             }
 
             .controls > div > label {
-                font-size: 0.9em;
+                font-size: 0.8em;
             }
 
             #volumeSlider {
-                width: 150px !important;
-                margin: 5px 0 !important;
+                width: 120px !important;
+                margin: 3px 0 !important;
             }
 
             .message {
-                font-size: 1.1em;
-                margin-top: 15px;
+                font-size: 1em;
+                margin-top: 10px;
                 padding: 0 10px;
             }
         }
 
         /* 小屏幕手机 */
         @media (max-width: 480px) {
+            body {
+                padding: 3px;
+            }
+
             .game-container {
-                padding: 15px;
+                padding: 10px;
+                min-height: calc(100vh - 6px);
             }
 
             h1 {
-                font-size: 1.5em;
-                margin-bottom: 15px;
+                font-size: 1.4em;
+                margin-bottom: 10px;
             }
 
             .game-info {
-                font-size: 0.8em;
+                font-size: 0.75em;
                 flex-direction: column;
-                gap: 5px;
+                gap: 3px;
+                margin-bottom: 8px;
             }
 
             .game-board {
-                max-width: 300px;
-                gap: 6px;
+                max-width: 100%;
+                gap: 4px;
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+                aspect-ratio: 4/6;
+                max-height: 65vh;
             }
 
             .card-face {
-                font-size: 1.5em;
-                border-radius: 8px;
+                font-size: 1.3em;
+                border-radius: 6px;
             }
 
             .card {
-                border-radius: 8px;
+                border-radius: 6px;
             }
 
             .btn {
-                padding: 8px 16px;
-                font-size: 0.8em;
-                min-width: 100px;
-                margin: 3px;
+                padding: 6px 12px;
+                font-size: 0.75em;
+                min-width: 80px;
+                margin: 2px;
             }
 
             .controls {
-                margin-top: 15px;
+                margin-top: 10px;
+            }
+
+            .controls > div {
+                margin-top: 6px !important;
+                gap: 4px;
+            }
+
+            .controls > div > label {
+                font-size: 0.75em;
             }
 
             #volumeSlider {
-                width: 120px !important;
+                width: 100px !important;
+                margin: 2px 0 !important;
             }
 
             .message {
-                font-size: 1em;
+                font-size: 0.9em;
+                margin-top: 8px;
             }
         }
 
-        /* 横屏模式优化 */
-        @media (max-height: 600px) and (orientation: landscape) {
+        /* 横屏模式优化 - 桌面端保持6x4 */
+        @media (max-height: 600px) and (orientation: landscape) and (min-width: 769px) {
             .game-container {
                 padding: 10px;
             }
@@ -391,6 +425,52 @@
             .message {
                 margin-top: 10px;
                 font-size: 0.9em;
+            }
+        }
+
+        /* 移动设备横屏模式 - 保持4x6但调整布局 */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .game-container {
+                padding: 8px;
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .game-board {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(6, 1fr);
+                aspect-ratio: 4/6;
+                max-width: 250px;
+                max-height: 80vh;
+                gap: 3px;
+            }
+
+            .controls {
+                flex-direction: column;
+                margin-top: 0;
+                min-width: 120px;
+            }
+
+            .btn {
+                padding: 6px 10px;
+                font-size: 0.7em;
+                min-width: 80px;
+                margin: 2px 0;
+            }
+
+            h1 {
+                font-size: 1.2em;
+                margin-bottom: 8px;
+            }
+
+            .game-info {
+                font-size: 0.7em;
+                margin-bottom: 8px;
+            }
+
+            .card-face {
+                font-size: 1.1em;
             }
         }
 
