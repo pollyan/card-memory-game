@@ -28,6 +28,12 @@
             padding: 30px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 600px;
+            min-height: 700px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
 
         h1 {
@@ -221,6 +227,17 @@
         /* 关卡选择界面样式 */
         .level-select {
             text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .level-select-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .level-select h2 {
@@ -308,7 +325,9 @@
 
         /* 游戏界面样式 */
         .game-play {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .game-play.hidden {
@@ -317,6 +336,18 @@
 
         .level-select.hidden {
             display: none;
+        }
+
+        .game-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-bottom {
+            flex-shrink: 0;
         }
 
         .game-header {
@@ -425,6 +456,12 @@
         .controls {
             text-align: center;
             margin-top: 30px;
+            min-height: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn {
@@ -453,6 +490,11 @@
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             opacity: 0;
             transition: opacity 0.5s;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: pre-line;
         }
 
         .message.show {
@@ -563,10 +605,12 @@
                 border-radius: 15px;
                 max-width: 100%;
                 width: 100%;
-                min-height: calc(100vh - 10px);
+                height: calc(100vh - 10px);
+                min-height: 600px;
+                max-height: none;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                position: relative;
             }
 
             /* 移动端关卡选择优化 */
@@ -652,6 +696,7 @@
             .controls {
                 margin-top: 15px;
                 flex-shrink: 0;
+                min-height: 50px;
             }
 
             .btn {
@@ -683,6 +728,7 @@
                 font-size: 1em;
                 margin-top: 10px;
                 padding: 0 10px;
+                min-height: 80px;
             }
         }
 
@@ -694,7 +740,8 @@
 
             .game-container {
                 padding: 10px;
-                min-height: calc(100vh - 6px);
+                height: calc(100vh - 6px);
+                min-height: 500px;
             }
 
             h1 {
@@ -864,40 +911,42 @@
     <div class="game-container">
         <!-- 关卡选择界面 -->
         <div class="level-select" id="levelSelect">
-            <h1>🎴 卡牌消消乐</h1>
-            <h2>选择关卡</h2>
-            <div class="level-grid">
-                <div class="level-card" data-level="1">
-                    <div class="level-number">1</div>
-                    <div class="level-name">新手关卡</div>
-                    <div class="level-desc">2×2 网格</div>
-                    <div class="level-status unlocked">✓</div>
-                </div>
-                <div class="level-card locked" data-level="2">
-                    <div class="level-number">2</div>
-                    <div class="level-name">进阶关卡</div>
-                    <div class="level-desc">4×4 网格</div>
-                    <div class="level-status">🔒</div>
-                </div>
-                <div class="level-card locked" data-level="3">
-                    <div class="level-number">3</div>
-                    <div class="level-name">挑战关卡</div>
-                    <div class="level-desc">4×6 网格</div>
-                    <div class="level-status">🔒</div>
-                </div>
-                <div class="level-card locked" data-level="4">
-                    <div class="level-number">4</div>
-                    <div class="level-name">专家关卡</div>
-                    <div class="level-desc">6×6 网格</div>
-                    <div class="level-status">🔒</div>
+            <div class="level-select-content">
+                <h1>🎴 卡牌消消乐</h1>
+                <h2>选择关卡</h2>
+                <div class="level-grid">
+                    <div class="level-card" data-level="1">
+                        <div class="level-number">1</div>
+                        <div class="level-name">新手关卡</div>
+                        <div class="level-desc">2×2 网格</div>
+                        <div class="level-status unlocked">✓</div>
+                    </div>
+                    <div class="level-card locked" data-level="2">
+                        <div class="level-number">2</div>
+                        <div class="level-name">进阶关卡</div>
+                        <div class="level-desc">4×4 网格</div>
+                        <div class="level-status">🔒</div>
+                    </div>
+                    <div class="level-card locked" data-level="3">
+                        <div class="level-number">3</div>
+                        <div class="level-name">挑战关卡</div>
+                        <div class="level-desc">4×6 网格</div>
+                        <div class="level-status">🔒</div>
+                    </div>
+                    <div class="level-card locked" data-level="4">
+                        <div class="level-number">4</div>
+                        <div class="level-name">专家关卡</div>
+                        <div class="level-desc">6×6 网格</div>
+                        <div class="level-status">🔒</div>
+                    </div>
                 </div>
             </div>
             <div class="controls">
                 <button class="btn" onclick="toggleMusic()" id="musicBtn">🔊 音乐开</button>
                 <button class="btn" onclick="toggleSound()" id="soundBtn">🔔 音效开</button>
-                <div style="margin-top: 15px; color: white;">
-                    <label for="volumeSlider">🔊 音量: </label>
-                    <input type="range" id="volumeSlider" min="0" max="100" value="30" onchange="adjustVolume(this.value)" style="width: 120px; margin: 0 10px;">
+                <div style="color: white; display: flex; align-items: center; gap: 10px;">
+                    <label for="volumeSlider">🔊 音量:</label>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="30" onchange="adjustVolume(this.value)" style="width: 120px;">
                     <span id="volumeDisplay">30%</span>
                 </div>
             </div>
@@ -910,21 +959,25 @@
                 <h1 id="levelTitle">🎴 第1关 - 新手关卡</h1>
             </div>
             
-            <div class="game-info">
-                <div>翻牌次数: <span id="moves">0</span></div>
-                <div>时间: <span id="time">00:00</span></div>
-                <div>匹配: <span id="matches">0</span>/<span id="totalPairs">2</span></div>
+            <div class="game-content">
+                <div class="game-info">
+                    <div>翻牌次数: <span id="moves">0</span></div>
+                    <div>时间: <span id="time">00:00</span></div>
+                    <div>匹配: <span id="matches">0</span>/<span id="totalPairs">2</span></div>
+                </div>
+                
+                <div class="game-board" id="gameBoard">
+                    <!-- 卡牌将通过JavaScript动态生成 -->
+                </div>
             </div>
             
-            <div class="game-board" id="gameBoard">
-                <!-- 卡牌将通过JavaScript动态生成 -->
+            <div class="game-bottom">
+                <div class="controls">
+                    <button class="btn" onclick="restartLevel()">🔄 重新开始</button>
+                </div>
+                
+                <div class="message" id="message"></div>
             </div>
-            
-            <div class="controls">
-                <button class="btn" onclick="restartLevel()">🔄 重新开始</button>
-            </div>
-            
-            <div class="message" id="message"></div>
         </div>
     </div>
 
