@@ -371,6 +371,31 @@
             aspect-ratio: 1/1;
         }
 
+        /* 下一关按钮特殊样式 */
+        .btn-next {
+            background: linear-gradient(45deg, #f39c12, #e74c3c) !important;
+            animation: nextLevelPulse 1.5s infinite;
+        }
+
+        .btn-next:hover {
+            background: linear-gradient(45deg, #e67e22, #c0392b) !important;
+        }
+
+        @keyframes nextLevelPulse {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 6px 25px rgba(243, 156, 18, 0.5);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+            }
+        }
+
         .card-face {
             position: absolute;
             width: 100%;
@@ -1577,32 +1602,48 @@
                 const config = levelConfigs[gameState.currentLevel];
                 let message = `🎉 ${config.name}通关！\n用时: ${minutes}分${seconds}秒\n翻牌次数: ${gameState.moves}次`;
                 
-                if (gameState.currentLevel < 4 && gameState.currentLevel === gameState.unlockedLevels - 1) {
-                    message += '\n\n🔓 恭喜解锁下一关！';
+                const hasNextLevel = gameState.currentLevel < 4;
+                
+                if (hasNextLevel) {
+                    if (gameState.currentLevel === gameState.unlockedLevels - 1) {
+                        message += '\n\n🔓 恭喜解锁下一关！';
+                    }
+                    message += '\n\n⏱️ 3秒后自动进入下一关...';
+                } else {
+                    message += '\n\n🏆 恭喜完成所有关卡！';
                 }
                 
                 showMessage(message, 'win-message');
                 
-                // 显示通关选项
-                setTimeout(() => {
-                    showLevelCompleteOptions();
-                }, 3000);
+                // 显示快速选项按钮
+                showQuickActions(hasNextLevel);
+                
+                // 如果有下一关，3秒后自动进入
+                if (hasNextLevel) {
+                    setTimeout(() => {
+                        startLevel(gameState.currentLevel + 1);
+                    }, 3000);
+                }
             }, 1000);
         }
         
-        // 显示关卡完成选项
-        function showLevelCompleteOptions() {
-            const hasNextLevel = gameState.currentLevel < 4;
-            const canAccessNextLevel = gameState.currentLevel < gameState.unlockedLevels;
+        // 显示快速操作按钮
+        function showQuickActions(hasNextLevel) {
+            let buttonsHtml = '<button class="btn" onclick="backToLevelSelect()">📋 选择关卡</button>';
+            buttonsHtml += '<button class="btn" onclick="restartLevel()">🔄 重新挑战</button>';
             
-            let buttonsHtml = '<button class="btn" onclick="restartLevel()">🔄 重新挑战</button>';
-            buttonsHtml += '<button class="btn" onclick="backToLevelSelect()">📋 选择关卡</button>';
-            
-            if (hasNextLevel && canAccessNextLevel) {
-                buttonsHtml += `<button class="btn" onclick="startLevel(${gameState.currentLevel + 1})">▶️ 下一关</button>`;
+            if (hasNextLevel) {
+                buttonsHtml += `<button class="btn btn-next" onclick="skipToNextLevel()">⏭️ 立即下一关</button>`;
             }
             
             document.querySelector('.controls').innerHTML = buttonsHtml;
+        }
+        
+        // 立即跳转到下一关
+        function skipToNextLevel() {
+            if (gameState.currentLevel < 4) {
+                startLevel(gameState.currentLevel + 1);
+            }
         }
 
         // 开始庆祝动画
@@ -1706,6 +1747,7 @@
         // 重新开始当前关卡
         function restartLevel() {
             initLevel(gameState.currentLevel);
+            hideMessage();
             
             // 重置控制按钮
             document.querySelector('.controls').innerHTML = '<button class="btn" onclick="restartLevel()">🔄 重新开始</button>';
