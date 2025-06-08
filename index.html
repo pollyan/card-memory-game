@@ -218,6 +218,159 @@
             }
         }
 
+        /* 关卡选择界面样式 */
+        .level-select {
+            text-align: center;
+        }
+
+        .level-select h2 {
+            color: white;
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .level-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .level-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            border-color: #4ecdc4;
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+        }
+
+        .level-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: linear-gradient(145deg, rgba(100, 100, 100, 0.2), rgba(100, 100, 100, 0.1));
+        }
+
+        .level-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .level-card.locked .level-number {
+            color: #666;
+        }
+
+        .level-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .level-card.locked .level-name {
+            color: #999;
+        }
+
+        .level-desc {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .level-card.locked .level-desc {
+            color: #777;
+        }
+
+        .level-status {
+            font-size: 1.5em;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+        }
+
+        .level-status.unlocked {
+            color: #4ecdc4;
+        }
+
+        /* 游戏界面样式 */
+        .game-play {
+            display: block;
+        }
+
+        .game-play.hidden {
+            display: none;
+        }
+
+        .level-select.hidden {
+            display: none;
+        }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            padding: 8px 16px;
+            font-size: 0.9em;
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(45deg, #5f3dc4, #8c7ae6);
+        }
+
+        #levelTitle {
+            flex: 1;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* 动态游戏板样式 */
+        .game-board.level-1 {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            max-width: 200px;
+            aspect-ratio: 1/1;
+        }
+
+        .game-board.level-2 {
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            max-width: 350px;
+            aspect-ratio: 1/1;
+        }
+
+        .game-board.level-3 {
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            max-width: 350px;
+            aspect-ratio: 4/6;
+        }
+
+        .game-board.level-4 {
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            max-width: 480px;
+            aspect-ratio: 1/1;
+        }
+
         .card-face {
             position: absolute;
             width: 100%;
@@ -389,6 +542,51 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
+            }
+
+            /* 移动端关卡选择优化 */
+            .level-select h2 {
+                font-size: 1.4em;
+                margin-bottom: 20px;
+            }
+
+            .level-grid {
+                max-width: 320px;
+                gap: 15px;
+            }
+
+            .level-card {
+                padding: 15px;
+            }
+
+            .level-number {
+                font-size: 2.5em;
+                margin-bottom: 8px;
+            }
+
+            .level-name {
+                font-size: 1em;
+            }
+
+            .level-desc {
+                font-size: 0.8em;
+            }
+
+            /* 移动端游戏界面优化 */
+            .game-header {
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .back-btn {
+                align-self: flex-start;
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+
+            #levelTitle {
+                font-size: 1.4em;
             }
 
             h1 {
@@ -639,30 +837,70 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>🎴 卡牌消消乐</h1>
-        
-        <div class="game-info">
-            <div>翻牌次数: <span id="moves">0</span></div>
-            <div>时间: <span id="time">00:00</span></div>
-            <div>匹配: <span id="matches">0</span>/12</div>
-        </div>
-        
-        <div class="game-board" id="gameBoard">
-            <!-- 卡牌将通过JavaScript动态生成 -->
-        </div>
-        
-        <div class="controls">
-            <button class="btn" onclick="startNewGame()">🎮 开始新游戏</button>
-            <button class="btn" onclick="toggleMusic()" id="musicBtn">🔊 音乐开</button>
-            <button class="btn" onclick="toggleSound()" id="soundBtn">🔔 音效开</button>
-            <div style="margin-top: 15px; color: white;">
-                <label for="volumeSlider">🔊 音量: </label>
-                <input type="range" id="volumeSlider" min="0" max="100" value="30" onchange="adjustVolume(this.value)" style="width: 120px; margin: 0 10px;">
-                <span id="volumeDisplay">30%</span>
+        <!-- 关卡选择界面 -->
+        <div class="level-select" id="levelSelect">
+            <h1>🎴 卡牌消消乐</h1>
+            <h2>选择关卡</h2>
+            <div class="level-grid">
+                <div class="level-card" data-level="1">
+                    <div class="level-number">1</div>
+                    <div class="level-name">新手关卡</div>
+                    <div class="level-desc">2×2 网格</div>
+                    <div class="level-status unlocked">✓</div>
+                </div>
+                <div class="level-card locked" data-level="2">
+                    <div class="level-number">2</div>
+                    <div class="level-name">进阶关卡</div>
+                    <div class="level-desc">4×4 网格</div>
+                    <div class="level-status">🔒</div>
+                </div>
+                <div class="level-card locked" data-level="3">
+                    <div class="level-number">3</div>
+                    <div class="level-name">挑战关卡</div>
+                    <div class="level-desc">4×6 网格</div>
+                    <div class="level-status">🔒</div>
+                </div>
+                <div class="level-card locked" data-level="4">
+                    <div class="level-number">4</div>
+                    <div class="level-name">专家关卡</div>
+                    <div class="level-desc">6×6 网格</div>
+                    <div class="level-status">🔒</div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="toggleMusic()" id="musicBtn">🔊 音乐开</button>
+                <button class="btn" onclick="toggleSound()" id="soundBtn">🔔 音效开</button>
+                <div style="margin-top: 15px; color: white;">
+                    <label for="volumeSlider">🔊 音量: </label>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="30" onchange="adjustVolume(this.value)" style="width: 120px; margin: 0 10px;">
+                    <span id="volumeDisplay">30%</span>
+                </div>
             </div>
         </div>
-        
-        <div class="message" id="message"></div>
+
+        <!-- 游戏界面 -->
+        <div class="game-play hidden" id="gamePlay">
+            <div class="game-header">
+                <button class="btn back-btn" onclick="backToLevelSelect()">← 返回</button>
+                <h1 id="levelTitle">🎴 第1关 - 新手关卡</h1>
+            </div>
+            
+            <div class="game-info">
+                <div>翻牌次数: <span id="moves">0</span></div>
+                <div>时间: <span id="time">00:00</span></div>
+                <div>匹配: <span id="matches">0</span>/<span id="totalPairs">2</span></div>
+            </div>
+            
+            <div class="game-board" id="gameBoard">
+                <!-- 卡牌将通过JavaScript动态生成 -->
+            </div>
+            
+            <div class="controls">
+                <button class="btn" onclick="restartLevel()">🔄 重新开始</button>
+            </div>
+            
+            <div class="message" id="message"></div>
+        </div>
     </div>
 
     <script>
@@ -683,7 +921,17 @@
             moves: 0,
             startTime: null,
             gameTimer: null,
-            isProcessing: false
+            isProcessing: false,
+            currentLevel: 1,
+            unlockedLevels: 1
+        };
+
+        // 关卡配置
+        const levelConfigs = {
+            1: { name: '新手关卡', cols: 2, rows: 2, pairs: 2, maxWidth: '200px', aspectRatio: '1/1' },
+            2: { name: '进阶关卡', cols: 4, rows: 4, pairs: 8, maxWidth: '350px', aspectRatio: '1/1' },
+            3: { name: '挑战关卡', cols: 4, rows: 6, pairs: 12, maxWidth: '350px', aspectRatio: '4/6' },
+            4: { name: '专家关卡', cols: 6, rows: 6, pairs: 18, maxWidth: '480px', aspectRatio: '1/1' }
         };
 
         // 卡牌符号
@@ -921,18 +1169,102 @@
             }
         }
 
-        // 初始化游戏
-        function initGame() {
-            // 初始化音频（只在第一次调用时）
+        // 初始化游戏系统
+        function initGameSystem() {
+            // 初始化音频
             if (!audioState.bgMusic && !audioState.audioContext) {
                 initAudio();
             }
             
-            // 创建卡牌数组（每个符号2张）
-            gameState.cards = [];
-            cardSymbols.forEach(symbolObj => {
-                gameState.cards.push(symbolObj, symbolObj);
+            // 加载游戏进度
+            loadGameProgress();
+            
+            // 显示关卡选择界面
+            showLevelSelect();
+            
+            // 绑定关卡选择事件
+            bindLevelSelectEvents();
+        }
+        
+        // 加载游戏进度
+        function loadGameProgress() {
+            const savedProgress = localStorage.getItem('cardGameProgress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                gameState.unlockedLevels = progress.unlockedLevels || 1;
+            }
+        }
+        
+        // 保存游戏进度
+        function saveGameProgress() {
+            const progress = {
+                unlockedLevels: gameState.unlockedLevels
+            };
+            localStorage.setItem('cardGameProgress', JSON.stringify(progress));
+        }
+        
+        // 显示关卡选择界面
+        function showLevelSelect() {
+            document.getElementById('levelSelect').classList.remove('hidden');
+            document.getElementById('gamePlay').classList.add('hidden');
+            updateLevelSelectUI();
+        }
+        
+        // 更新关卡选择界面
+        function updateLevelSelectUI() {
+            const levelCards = document.querySelectorAll('.level-card');
+            levelCards.forEach((card, index) => {
+                const level = index + 1;
+                if (level <= gameState.unlockedLevels) {
+                    card.classList.remove('locked');
+                    card.querySelector('.level-status').textContent = '✓';
+                    card.querySelector('.level-status').classList.add('unlocked');
+                } else {
+                    card.classList.add('locked');
+                    card.querySelector('.level-status').textContent = '🔒';
+                    card.querySelector('.level-status').classList.remove('unlocked');
+                }
             });
+        }
+        
+        // 绑定关卡选择事件
+        function bindLevelSelectEvents() {
+            const levelCards = document.querySelectorAll('.level-card');
+            levelCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const level = parseInt(this.dataset.level);
+                    if (level <= gameState.unlockedLevels) {
+                        startLevel(level);
+                    }
+                });
+            });
+        }
+        
+        // 开始指定关卡
+        function startLevel(level) {
+            gameState.currentLevel = level;
+            const config = levelConfigs[level];
+            
+            // 更新界面
+            document.getElementById('levelSelect').classList.add('hidden');
+            document.getElementById('gamePlay').classList.remove('hidden');
+            document.getElementById('levelTitle').textContent = `🎴 第${level}关 - ${config.name}`;
+            document.getElementById('totalPairs').textContent = config.pairs;
+            
+            // 初始化当前关卡的游戏
+            initLevel(level);
+        }
+        
+        // 初始化关卡
+        function initLevel(level) {
+            const config = levelConfigs[level];
+            
+            // 创建卡牌数组
+            gameState.cards = [];
+            for (let i = 0; i < config.pairs; i++) {
+                const symbolObj = cardSymbols[i % cardSymbols.length];
+                gameState.cards.push(symbolObj, symbolObj);
+            }
             
             // 洗牌
             shuffleArray(gameState.cards);
@@ -945,7 +1277,7 @@
             gameState.isProcessing = false;
             
             // 创建游戏板
-            createGameBoard();
+            createGameBoard(level);
             
             // 更新显示
             updateDisplay();
@@ -966,9 +1298,14 @@
         }
 
         // 创建游戏板
-        function createGameBoard() {
+        function createGameBoard(level) {
             const gameBoard = document.getElementById('gameBoard');
             gameBoard.innerHTML = '';
+            
+            // 移除所有关卡样式类
+            gameBoard.className = 'game-board';
+            // 添加当前关卡样式类
+            gameBoard.classList.add(`level-${level}`);
             
             gameState.cards.forEach((symbolObj, index) => {
                 const card = document.createElement('div');
@@ -1182,8 +1519,9 @@
                 gameState.matchedPairs++;
                 
                 // 检查游戏是否结束
-                if (gameState.matchedPairs === 12) {
-                    endGame();
+                const currentConfig = levelConfigs[gameState.currentLevel];
+                if (gameState.matchedPairs === currentConfig.pairs) {
+                    endLevel();
                 }
             } else {
                 // 匹配失败，翻回卡牌
@@ -1216,8 +1554,8 @@
             document.getElementById('matches').textContent = gameState.matchedPairs;
         }
 
-        // 结束游戏
-        function endGame() {
+        // 结束关卡
+        function endLevel() {
             clearInterval(gameState.gameTimer);
             const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
             const minutes = Math.floor(elapsed / 60);
@@ -1226,12 +1564,45 @@
             // 播放胜利音效
             playSound('winSound');
             
+            // 解锁下一关
+            if (gameState.currentLevel === gameState.unlockedLevels && gameState.currentLevel < 4) {
+                gameState.unlockedLevels++;
+                saveGameProgress();
+            }
+            
             // 开始庆祝动画
             startCelebration();
             
             setTimeout(() => {
-                showMessage(`🎉 恭喜通关！\n用时: ${minutes}分${seconds}秒\n翻牌次数: ${gameState.moves}次`, 'win-message');
+                const config = levelConfigs[gameState.currentLevel];
+                let message = `🎉 ${config.name}通关！\n用时: ${minutes}分${seconds}秒\n翻牌次数: ${gameState.moves}次`;
+                
+                if (gameState.currentLevel < 4 && gameState.currentLevel === gameState.unlockedLevels - 1) {
+                    message += '\n\n🔓 恭喜解锁下一关！';
+                }
+                
+                showMessage(message, 'win-message');
+                
+                // 显示通关选项
+                setTimeout(() => {
+                    showLevelCompleteOptions();
+                }, 3000);
             }, 1000);
+        }
+        
+        // 显示关卡完成选项
+        function showLevelCompleteOptions() {
+            const hasNextLevel = gameState.currentLevel < 4;
+            const canAccessNextLevel = gameState.currentLevel < gameState.unlockedLevels;
+            
+            let buttonsHtml = '<button class="btn" onclick="restartLevel()">🔄 重新挑战</button>';
+            buttonsHtml += '<button class="btn" onclick="backToLevelSelect()">📋 选择关卡</button>';
+            
+            if (hasNextLevel && canAccessNextLevel) {
+                buttonsHtml += `<button class="btn" onclick="startLevel(${gameState.currentLevel + 1})">▶️ 下一关</button>`;
+            }
+            
+            document.querySelector('.controls').innerHTML = buttonsHtml;
         }
 
         // 开始庆祝动画
@@ -1325,9 +1696,19 @@
             messageEl.className = 'message';
         }
 
-        // 开始新游戏
-        function startNewGame() {
-            initGame();
+        // 返回关卡选择
+        function backToLevelSelect() {
+            clearInterval(gameState.gameTimer);
+            showLevelSelect();
+            hideMessage();
+        }
+        
+        // 重新开始当前关卡
+        function restartLevel() {
+            initLevel(gameState.currentLevel);
+            
+            // 重置控制按钮
+            document.querySelector('.controls').innerHTML = '<button class="btn" onclick="restartLevel()">🔄 重新开始</button>';
         }
 
         // 用户首次点击时启用音频
@@ -1349,9 +1730,9 @@
             }
         }
 
-        // 页面加载时初始化游戏
+        // 页面加载时初始化游戏系统
         window.onload = function() {
-            initGame();
+            initGameSystem();
             
             // 添加用户交互监听器以启用音频
             document.addEventListener('click', enableAudio, { once: true });
